@@ -13,11 +13,16 @@ export function Home() {
 
   let countdown
 
-  // if time < 10, add 0 before:
   function formatTime (time) {
-    if(seconds >= 60) {
-      setSeconds(59)
+    if(seconds >= 60 && minutes <= 60) {
+      setSeconds(0)
+      setMinutes(minutes + 1)
+    } else if(minutes > 60) {
+      setMinutes(60)
+      return 0
     }
+    
+    // if time < 10, add 0 before:
     return time < 10 ? `0${time}` : `${time}`
   }
 
@@ -43,9 +48,19 @@ export function Home() {
   }
 
   function pauseTimer() {
-    setMinutes(minutes)
-    setSeconds(seconds)
     clearTimeout(countdown)
+    setIsPlaying(!isPlaying)
+  }
+
+  function resetTimer() {
+    const isOk = confirm("Resetar o timer?")
+    
+    if(isOk) {
+      clearTimeout(countdown)
+      setIsPlaying(isPlaying)
+      setMinutes(50)
+      setSeconds(0)
+    }
   }
 
   function togglePlayPause() {
@@ -71,12 +86,15 @@ export function Home() {
         setSeconds(0)
       }
 
-      if(seconds > 10) {
+      if(prevSeconds > 10) {
         return prevSeconds - 10
-      } else {
-        prevSeconds - seconds
+      } else if(minutes > 0 && prevSeconds === 0) {
+        setMinutes(minutes - 1)
+        return prevSeconds = 50
+      } else if(minutes > 0 && prevSeconds <= 10) {
+        setMinutes(minutes - 1)
+        return prevSeconds = 59
       }
-      // continuar aqui
     })
   }
 
@@ -91,7 +109,7 @@ export function Home() {
 
       <div className="buttons-div">
         <ButtonPlayPause isPlaying={isPlaying} onClick={togglePlayPause}/>
-        <ButtonTimer icon={MdOutlineStopCircle}/>
+        <ButtonTimer onClick={resetTimer} icon={MdOutlineStopCircle}/>
         <ButtonTimer onClick={lessTenSeconds} icon={MdOutlineReplay10}/>
         <ButtonTimer onClick={moreTenSeconds} icon={MdOutlineForward10}/>
       </div>
