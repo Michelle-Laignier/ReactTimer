@@ -8,28 +8,28 @@ import { ButtonPlayPause } from "../../components/ButtonPlayPause"
 
 export function Home() {
   const [isPlaying, setIsPlaying] = useState(true)
-  const [timerMinutes, setTimerMinutes] = useState(50)
-  const [timerSeconds, setTimerSeconds] = useState(0)
+  const [minutes, setMinutes] = useState(50)
+  const [seconds, setSeconds] = useState(0)
 
   let countdown
 
   // if time < 10, add 0 before:
   function formatTime (time) {
-    if(timerSeconds >= 60) {
-      setTimerSeconds(59)
+    if(seconds >= 60) {
+      setSeconds(59)
     }
     return time < 10 ? `0${time}` : `${time}`
   }
 
   function timerCountdown() {
-    setTimerSeconds((prevSeconds) => {
+    setSeconds((prevSeconds) => {
       if(prevSeconds === 0) {
-        setTimerSeconds(59)
+        setSeconds(59)
       
-        setTimerMinutes((prevMinutes) => {
+        setMinutes((prevMinutes) => {
           if (prevMinutes <= 0 && prevSeconds <= 0) {
-            setTimerMinutes(0)
-            setTimerSeconds(0)
+            setMinutes(0)
+            setSeconds(0)
             clearTimeout(countdown)
             setIsPlaying(isPlaying)
             return
@@ -43,8 +43,8 @@ export function Home() {
   }
 
   function pauseTimer() {
-    setTimerMinutes(timerMinutes)
-    setTimerSeconds(timerSeconds)
+    setMinutes(minutes)
+    setSeconds(seconds)
     clearTimeout(countdown)
   }
 
@@ -59,22 +59,22 @@ export function Home() {
   }
 
   function moreTenSeconds() {
-    setTimerSeconds((prevSeconds) => {
+    setSeconds((prevSeconds) => {
       return prevSeconds + 10
     })
   }
 
   function lessTenSeconds() {
-    setTimerSeconds((prevSeconds) => {
-      if(timerMinutes == 0 && timerSeconds <= 10) {
-        setTimerMinutes(0)
-        setTimerSeconds(0)
+    setSeconds((prevSeconds) => {
+      if(minutes == 0 && seconds <= 10) {
+        setMinutes(0)
+        setSeconds(0)
       }
 
-      if(timerSeconds > 10) {
+      if(seconds > 10) {
         return prevSeconds - 10
       } else {
-        prevSeconds - timerSeconds
+        prevSeconds - seconds
       }
       // continuar aqui
     })
@@ -84,9 +84,9 @@ export function Home() {
     <Container>
     <Timer>
       <div>
-        <span>{formatTime(timerMinutes)}</span>
+        <span>{formatTime(minutes)}</span>
         <span>:</span>
-        <span>{formatTime(timerSeconds)}</span>
+        <span>{formatTime(seconds)}</span>
       </div>
 
       <div className="buttons-div">
