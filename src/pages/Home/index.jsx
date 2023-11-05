@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import {  MdOutlineStopCircle ,MdOutlineReplay10, MdOutlineForward10 } from "react-icons/md"
 
 import { Container, Timer, Sounds } from "./styles"
@@ -11,7 +11,7 @@ export function Home() {
   const [minutes, setMinutes] = useState(50)
   const [seconds, setSeconds] = useState(0)
 
-  let countdown
+  let countdown = useRef(null)
 
   function formatTime (time) {
     if(seconds >= 60 && minutes <= 60) {
@@ -44,20 +44,23 @@ export function Home() {
       }
       return prevSeconds - 1
     })
-    countdown = setTimeout(() => timerCountdown(), 1000)
+    countdown.current = setTimeout(() => timerCountdown(), 1000)
   }
 
   function pauseTimer() {
-    clearTimeout(countdown)
+    clearTimeout(countdown.current)
     setIsPlaying(!isPlaying)
   }
 
   function resetTimer() {
-    const isOk = confirm("Resetar o timer?")
+    if(minutes === 50 && seconds === 0) {
+      return
+    }
     
+    const isOk = confirm("Resetar o timer?")
+
     if(isOk) {
-      clearTimeout(countdown)
-      setIsPlaying(isPlaying)
+      pauseTimer()
       setMinutes(50)
       setSeconds(0)
     }
