@@ -1,7 +1,7 @@
 import { useRef, useState } from "react"
 import ReactPlayer from "react-player"
 import { IoMdBonfire, IoMdSnow, IoMdRainy } from "react-icons/io"
-import {  MdOutlineStopCircle ,MdOutlineReplay10, MdOutlineForward10 } from "react-icons/md"
+import {  MdOutlineStopCircle, MdOutlineReplay5, MdOutlineForward5 } from "react-icons/md"
 
 import { Container, Timer, Sounds } from "./styles"
 
@@ -22,12 +22,9 @@ export function Home() {
   let countdown = useRef(null)
 
   function formatTime (time) {
-    if(seconds >= 60 && minutes <= 60) {
-      setSeconds(0)
-      setMinutes(minutes + 1)
-    } else if(minutes > 60) {
+    if(minutes > 60) {
       setMinutes(60)
-      return 0
+      setSeconds(0)
     }
     
     // if time < 10, add 0 before:
@@ -87,30 +84,22 @@ export function Home() {
     }
   }
 
-  function moreTenSeconds() {
+  function plusFiveMinutes() {
     audio()
-    setSeconds((prevSeconds) => {
-      return prevSeconds + 10
+    setMinutes((prevMinutes) => {
+      return prevMinutes + 5
     })
   }
 
-  function lessTenSeconds() {
+  function lessFiveMinutes() {
     audio()
-    setSeconds((prevSeconds) => {
-      if(minutes == 0 && seconds <= 10) {
+    setMinutes((prevMinutes) => {
+      if(minutes === 0 || minutes <= 5) {
         setMinutes(0)
         setSeconds(0)
       }
 
-      if(prevSeconds > 10) {
-        return prevSeconds - 10
-      } else if(minutes > 0 && prevSeconds === 0) {
-        setMinutes(minutes - 1)
-        return prevSeconds = 50
-      } else if(minutes > 0 && prevSeconds <= 10) {
-        setMinutes(minutes - 1)
-        return prevSeconds = 59
-      }
+      return prevMinutes - 5
     })
   }
 
@@ -159,8 +148,8 @@ export function Home() {
       <div className="buttons-div">
         <ButtonPlayPause isPlaying={isPlaying} onClick={togglePlayPause}/>
         <ButtonTimer onClick={resetTimer} icon={MdOutlineStopCircle}/>
-        <ButtonTimer onClick={lessTenSeconds} icon={MdOutlineReplay10}/>
-        <ButtonTimer onClick={moreTenSeconds} icon={MdOutlineForward10}/>
+        <ButtonTimer onClick={lessFiveMinutes} icon={MdOutlineReplay5}/>
+        <ButtonTimer onClick={plusFiveMinutes} icon={MdOutlineForward5}/>
       </div>
     </Timer>
 
@@ -177,6 +166,6 @@ export function Home() {
       <SoundButton onClick={toggleVideoSnow} icon={IoMdSnow} videoPlaying={isVideoPlaying}/>
       <SoundButton onClick={toggleVideoRain} icon={IoMdRainy} videoPlaying={isVideoPlaying}/>
     </Sounds>
-   </Container> 
+   </Container>
   )
 }
