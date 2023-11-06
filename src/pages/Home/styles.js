@@ -18,9 +18,25 @@ export const Timer = styled.div`
     display: flex;
     justify-content: center;
     gap: 1rem;
+    
+    background-color: ${({ theme }) => theme.COLORS.BG_DIV_BUTTONS};
+    border-radius: 55px;
+    padding: 10px;
   }
 `
 
 export const Sounds = styled.div`
-  
+  display: flex;
+  gap: 1rem;
+  margin-top: 20px;
+
+  .video{
+    position: absolute;
+
+    height: 100vh;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    z-index: -1;
+  }
 `
